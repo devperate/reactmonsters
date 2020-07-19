@@ -16,8 +16,17 @@ class App extends Component {
 
   componentDidMount(){
     fetch('http://localhost:3000/users.json')
-      .then(response => response.json())
-      .then(users => this.setState({monsters: users}));
+      .then(response => response.text())
+      .then(text => {
+        try{
+          const users = JSON.parse(text);
+          this.setState({monsters: users});
+        }catch{
+          fetch('https://jsonplaceholder.typicode.com/users')
+            .then(response => response.json())
+            .then(users => this.setState({monsters: users}));
+        }
+      });
   }
 
   searchHandler = (e) => {
